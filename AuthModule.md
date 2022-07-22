@@ -20,3 +20,13 @@
 1. Создаем контроллер для api LoginController
 2. Создаем метод login, который принимает request //проверяем routes при необходимости обновляем маршруты. //post запрос
 
+### Создание шаблона/представления
+
+1. Используем adminlte.io или свой шаблон. 
+2. В /view/Pub создаем директорию layouts - > layout.blade.php //макет проекта. <- index.html (adminlte) 
+3. Убираем сайдбар, навигацию  wrapper меняем на pagecontent, content-wrapper меняем на wrapper {{content}}, футер выносим в отдельную директорию (parts), в которой будут располагаться составные части макета. Подключаем части шаблона @include('пространство имен.путь к файлам')
+4. Подключаем контент @yield('content'), подключаем стили.
+5. theme style, bootstrap -> /добавляем в директорию public прописываем путь {{ asset('путь к файлу в директории public') }}
+6. @extends('пространство имен.путь к файлу шаблона')
+7. @section('content') @endsection
+8. Строки хранить в файлах локализации {{__('public.login_title')} /resources/lang/en/public.php return ['login_title' => 'значение']
