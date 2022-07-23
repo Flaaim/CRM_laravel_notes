@@ -7,6 +7,7 @@
 4. Создаем переменную для редиректа после аутентификации (путь куда будет перенаправляться залогиненный пользователь). 
 5. Создаем контструктор привязываем middleware к guest $this->middleware('guest) //за исключением 'logout';
 6. Переопределяем метод ShowLoginForm(); //возвращаем view(); 'Pub::Autt.login'
+7. Добавляем в роут, post который будет обрабытывать отправку данных 
 
 #### Определяем пространство имен для view //Pub //Admin
 
@@ -30,3 +31,16 @@
 6. @extends('пространство имен.путь к файлу шаблона')
 7. @section('content') @endsection
 8. Строки хранить в файлах локализации {{__('public.login_title')} /resources/lang/en/public.php return ['login_title' => 'значение']
+
+### База данных
+
+1. Создаем model User и миграцию users.
+2. В миграцию вносим все необходимые столбцы firstname, lastname (nullable), email unique, phone, password, status enum, //rememberToken -> применяем миграцию -path[путь до миграции]
+3. Создаем Seed. CreateAdminUser DB::table('name')->insert([]); для пароля используем bcrypt(); 
+4. Формируем модель User, 
+  extends AuthUser
+  use illuminate/foundation/auth/user as AuthUser
+  добавить трейт hasapitoken
+5. формируем protected $fillable = [] //массив полей firstname, lastname, email, phone, status
+6. защищенное свойство $hidden = [] //password
+7. В файле config/auth.php изменить провайдерc изменить модель
