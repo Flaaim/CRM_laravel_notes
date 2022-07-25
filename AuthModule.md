@@ -20,7 +20,9 @@
 
 1. Создаем контроллер для api LoginController
 2. Создаем метод login, который принимает request //проверяем routes при необходимости обновляем маршруты. //post запрос
+
 #### 3.1 Реализация валидации данных
+
 1. Вынесем валидацию в отдельный класс Request в Modules/.. /Request/LoginRequest
 2. В rules возвращаем массив правил валидации для полей. Authorize возвращает true если пользователю разрещается использование данного запроса.
 3. Для Api при валидации необходимо вернуть ответ. 
@@ -32,6 +34,12 @@
 9. Определяем дополнительные методы success($data = []) который возвращает sendJsonResponse(true, 200, [], $data); notFound() возвращает sendJsonResponse(false, 404, [], [])
 10. В методе failedValidation обращаемся к классу ResponseService и вызываем на исполнение метод sendJsonResponse()//аргументы статус false, code 403, $errors
 
+3. Формируем массив $credentials; в нем храняться данные авторизации $request() <- функция хелпер, передаем в нее поля нашей формы в виде массива (email, password)
+4. Аутентифицируем пользователя, использую Auth::attempt($credentials) проверяем через if, если ошибка -> возвращаем json ответ с помощью класса ResponseService и функции sendJsonResponse() false, 403, массив ошибок, сообщение auth.login_error
+5. С помощью request получаем аутентифицированного пользователя. 
+6. Формируем пользователя $tokenResult = $user->createToken('Personal Access Token');
+7. Далее возвращаем json ответ (true, 200, [], []). В массиве $data формируем необходимые данные 'api_token' => $tokenResult->accessToken, 'user' => $user, 'token_type' => 'Bearer', 'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
+8. Проверяем наличие трейта HasApiTokens в модели User
 ### Создание шаблона/представления
 
 1. Используем adminlte.io или свой шаблон. 
