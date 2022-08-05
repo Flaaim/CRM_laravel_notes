@@ -31,3 +31,4 @@ if($locale && in_array($locale, config(app.locales)){
 ```
 10. В классе Base создаем еще одно свойство $locale. Определяем данное свойство в конструкторе в middleware $this->locale = App::getLocale();
 11. В каталоге resources в директории lang мы можем разместить необходимый набор локализаций текущего проекта. Создаем папки ru , en в каждой из этих папок создаем файлы admin.php Каждый из этих файлов возвращает массив. В массиве формируем необходимык ключи, например 'dashboard_title' => 'Главная'
+11. В modularprovider prefix необходимо добавить LocalizationService::locale()
