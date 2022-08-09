@@ -29,20 +29,27 @@
 3. Для Api при валидации необходимо вернуть json ответ. 
 4. Создаем еще один класс, который будет использоваться как родитель для всех реквестов, но при этом он будет наследоваться от базового класса FormRequest
 5. В App создаем папку Services -> общая логика всех эл-тов проекта. Создаем папку Requests, внутри создаем новый класс ApiRequest (прописываем namespace). ApiRequest наследуется от FormREquest и является родителем для LoginRequest.
-6. Переопределяем в классе ApiRequest метод failedvalidation(). Создаем переменную $errors = (new ValidationException($validator))->errors(); Генерируем исключение HttpResponseException() //передаем в HttpResponseException метод, который описываем в специальном классе. 
-7. В папке Services создаем еще одну директорию -> Response, в котороый создаем новый класс ResponseService (don't forget add namespace). В данном классе определяем статический приватный метод Response Params()  формирует параметры запроса, возвращает массив параметров status, errors [], data []. Парметры будут приходить в метод ResponseParams.
-8. Определяем статический публичный метод sendJsonResponse($status, $code = 200, $errors = [], $data = []) //отправляет в качестве ответа jsonстроку. Возвращает с помощью функции хелпера response()->json(параметры, $code)//параметры ответа json() формируем использую  sendJsonResponse ($status, $errors, $data)
-9. Определяем дополнительные методы success($data = []) который возвращает sendJsonResponse(true, 200, [], $data); notFound() возвращает sendJsonResponse(false, 404, [], [])
-10. В методе failedValidation обращаемся к классу ResponseService и вызываем на исполнение метод sendJsonResponse()//аргументы статус false, code 403, $errors
+6. Переопределяем в классе ApiRequest метод failedvalidation(). Создаем переменную $errors = (new ValidationException($validator))->errors(); Генерируем исключение HttpResponseException() //передаем в HttpResponseException метод, который описываем в специальном классе (ResponseService)
+7. В папке Services создаем еще одну директорию -> Response, в которой создаем новый класс ResponseService (don't forget add namespace). В данном классе определяем статический приватный метод ResponseParams(). В данный метод будут приходить параметры ($status, $errors, $data), а возвращать он должен массив параметров 
+```
+'status'=> $status,
+'errors' => (object)$errors,
+'data' => (object)$data,
+```
+11. Определяем статический публичный метод sendJsonResponse($status, $code = 200, $errors = [], $data = []) //отправляет в качестве ответа jsonстроку. Возвращает с помощью функции хелпера response()->json([функция ResponseParams()], $code);
+
+12. Определяем дополнительные методы success($data = []) который возвращает sendJsonResponse(true, 200, [], $data); notFound() возвращает sendJsonResponse(false, 404, [], [])
+14. В методе failedValidation передаем в HttpResponseException функцию sendJsonResponce() аргументы статус false, code 403, $errors 
 
 ### AuthController
 
-3. Формируем массив $credentials; в нем храняться данные авторизации $request() <- функция хелпер, передаем в нее поля нашей формы в виде массива (email, password)
-4. Аутентифицируем пользователя, использую Auth::attempt($credentials) проверяем через if, если ошибка -> возвращаем json ответ с помощью класса ResponseService и функции sendJsonResponse() false, 403, массив ошибок, сообщение auth.login_error
-5. С помощью request получаем аутентифицированного пользователя. 
+3. Формируем массив $credentials; в нем храняться данные авторизации request(['email', 'password']) <- функция хелпер, передаем в нее поля нашей формы в виде массива (email, password)
+4. Аутентифицируем пользователя, использую Auth::attempt($credentials) проверяем через if, если ошибка -> возвращаем json ответ с помощью класса ResponseService и функции sendJsonResponse() false, 403, массив ошибок $errors = ['message'=>'auth.login_error']
+5. С помощью $user = $request->user(); получаем аутентифицированного пользователя. 
 6. Формируем пользователя $tokenResult = $user->createToken('Personal Access Token');
-7. Далее возвращаем json ответ (true, 200, [], []). В массиве $data формируем необходимые данные 'api_token' => $tokenResult->accessToken, 'user' => $user, 'token_type' => 'Bearer', 'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
+7. Далее возвращаем json ответ ResponseService::sendJsonResponse(true, 200, [], []). В массиве $data формируем необходимые данные 'api_token' => $tokenResult->accessToken, 'user' => $user, 'token_type' => 'Bearer', 'expires_at' => Carbon::parse($tokenResult->token->expires_at)->toDateTimeString()
 8. Проверяем наличие трейта HasApiTokens в модели User
+9. Незабываем подключить use Carbon\Carbon
 
 ### Создание шаблона/представления
 
