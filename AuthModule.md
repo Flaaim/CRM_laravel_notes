@@ -28,7 +28,7 @@
 2. В rules возвращаем массив правил валидации для полей. Authorize возвращает true если пользователю разрещается использование данного запроса.
 3. Для Api при валидации необходимо вернуть ответ. 
 4. Создаем еще один класс, который будет использоваться как родитель для всех реквестов, но при этом он будет наследоваться от базового класса FormRequest
-5. В App создаем папку Services -> общая логика всех эл-тов проекта. Создаем папку Requests, внутри создаем новый класс ApiRequest (прописываем namespace). ApiRequest наследуется от FormREquest и родитель LoginRequest.
+5. В App создаем папку Services -> общая логика всех эл-тов проекта. Создаем папку Requests, внутри создаем новый класс ApiRequest (прописываем namespace). ApiRequest наследуется от FormREquest и родитель для LoginRequest.
 6. Переопределяем в классе метод failedvalidation(). Создаем переменную $errors = (new ValidationException($validator))->errors(); Генерируем исключение HttpResponseException() //передаем в HttpResponseException метод, который описываем в специальном классе. 
 7. В папке Services создаем еще одну директорию -> Response, в котороый создаем новый класс ResponseService (don't forget add namespace). В данном классе определяем статический приватный метод Response Params()  формирует параметры запроса, возвращает массив параметров status, errors [], data []. Парметры будут приходить в метод ResponseParams.
 8. Определяем статический публичный метод sendJsonResponse($status, $code = 200, $errors = [], $data = []) //отправляет в качестве ответа jsonстроку. Возвращает с помощью функции хелпера response()->json(параметры, $code)//параметры ответа json() формируем использую  sendJsonResponse ($status, $errors, $data)
