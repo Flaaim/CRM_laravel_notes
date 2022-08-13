@@ -52,3 +52,17 @@ $this->content = view('Admin::Role.index')->with(['role'=>$roles, 'title' => $th
 
 ## Часть 2
 1. Заполняем шаблон index. В RoleController описываем метод create(); //по аналогии с методом index();
+2. В RolePolicy добавляем методо create()//возвращает true;
+3. Определяем шаблон create. Проверяем роуты
+```
+Route::prefix('roles')->group(function(){
+    route::get('/', [RoleController::class, 'index'])->name('roles.index');
+    Route::post('/', [RoleController::class, 'store'])->name('roles.store');
+    route::get('/create', [RoleController::class, 'create'])->name('roles.create');
+    route::get('/{role}', [RoleController::class, 'show'])->name('roles.read');
+    route::get('/edit/{role}', [RoleController::class, 'edit'])->name('roles.edit');
+    route::put('/{role}', [RoleController::class, 'update'])->name('roles.update');
+    route::delete('/{role}', [RoleController::class, 'delete'])->name('roles.delete');
+});
+```
+4. В папке Role создаем папку Requests, в данной папке командой создаем файл RoleRequest
