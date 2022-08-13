@@ -74,3 +74,4 @@ Route::prefix('roles')->group(function(){
             $this->service = $roleSrvice; }
 
 ```
+8. В store() обращаемся к свойству service и сохраняем в нем метод save() $this->service->save(); Возвращаем \Redirect::route('roles.index')->with(['message'=>'success']);
