@@ -49,3 +49,6 @@ $this->content = view('Admin::Role.index')->with(['role'=>$roles, 'title' => $th
 ```
 Возвращаем renderOutput();
 15. В файле RolePolicy. Определяем метод view, который возвращает true (временно). Перходим в AuthServiceProvider в массив $policies прописываем Role::class => RolePolicy::class 
+
+## Часть 2
+1. Заполняем шаблон index. В RoleController описываем метод create(); //по аналогии с методом index();
