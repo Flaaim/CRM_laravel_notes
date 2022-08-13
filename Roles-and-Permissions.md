@@ -65,4 +65,12 @@ Route::prefix('roles')->group(function(){
     route::delete('/{role}', [RoleController::class, 'delete'])->name('roles.delete');
 });
 ```
-4. В папке Role создаем папку Requests, в данной папке командой создаем файл RoleRequest
+4. В папке Role создаем папку Requests, в данной папке командой создаем файл RoleRequest. Устанавливаем authorization true. Описываем правила. 
+5. Создаем папку Services, в которой создаем файл RoleService, в котором определяем метод save(RoleRequest $request, Model $model){}
+6. В классе Base  опеределяем свойство $service.
+7. В RoleController определяем метод 
+```
+ __construct(RoleService $roleService){
+            $this->service = $roleSrvice; }
+
+```
