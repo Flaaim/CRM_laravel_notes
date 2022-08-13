@@ -71,7 +71,10 @@ Route::prefix('roles')->group(function(){
 7. В RoleController определяем метод 
 ```
  __construct(RoleService $roleService){
+            parent::__construct();
             $this->service = $roleSrvice; }
 
 ```
 8. В store() обращаемся к свойству service и сохраняем в нем метод save() $this->service->save(); Возвращаем \Redirect::route('roles.index')->with(['message'=>'success']);
+9. В методе save() обращаемся к модели $model->fill($request->only($model->getFillable())); Сохраняем данные в базе. Возвращаем или true или какие то проверки сохранения делаем.
+10. 
