@@ -77,4 +77,22 @@ Route::prefix('roles')->group(function(){
 ```
 8. В store() обращаемся к свойству service и сохраняем в нем метод save() $this->service->save(); Возвращаем \Redirect::route('roles.index')->with(['message'=>'success']);
 9. В методе save() обращаемся к модели $model->fill($request->only($model->getFillable())); Сохраняем данные в базе. Возвращаем или true или какие то проверки сохранения делаем.
-10. 
+
+## Часть 3
+
+1. В PermissionController метод store(Request $request). Проверяем есть ли у пользователя права на выполнении соответсвующего запроса. $this->authorize('create', Role::class);
+2. Получаем все роли $roles = Role::all();
+3. Получаем реквест без '_token', $data = $request->except('_token');
+4. Циклом обходим $roles 
+
+```
+foreach($roles as $role){
+  if(isset($data[$role->id])){
+        $role->savePermissions($data[$role->id]);    
+  }else {
+        $role->savePermissions([]);
+ }
+   }
+```
+5. Переносим данный код начиная от получения всех ролей до конца цикла в метод save($request) //папка Service
+6. На месте перенесенного кода оставляем $this->service->save($request);
