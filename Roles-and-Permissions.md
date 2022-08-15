@@ -97,3 +97,29 @@ foreach($roles as $role){
 5. Переносим данный код начиная от получения всех ролей до конца цикла в метод save($request) //папка Service
 6. На месте перенесенного кода оставляем $this->service->save($request);
 7. В методе store(Request $request) дописываем return back()->with(['message'=> 'success]);
+8. Раскоментируем метод hasPermission($val->alias); в Шаблоне Pesmission/index.blade.php;
+9. В модели Role добавляем метод hasPermission($val->alias);
+
+```
+public function hasPermission($alias, $require = false){
+        if(is_array($alias)){
+            foreach($alias as $permissionAlias){
+                $hasPermissions = $this->hasPermission($permissionAlias);
+                    if($hasPermissions && !$require){
+                        return true;
+                    }
+                    elseif(!$hasPermissions && $require){
+                        return false;
+                    }
+            }
+        }else {
+            foreach($this->perms as $permission){
+                if($permission->alias == $alias){
+                    return true;
+                }
+            }
+        }
+        return $require;
+    }
+ ```
+ 
