@@ -96,3 +96,4 @@ foreach($roles as $role){
 ```
 5. Переносим данный код начиная от получения всех ролей до конца цикла в метод save($request) //папка Service
 6. На месте перенесенного кода оставляем $this->service->save($request);
+7. В методе store(Request $request) дописываем return back()->with(['message'=> 'success]);
