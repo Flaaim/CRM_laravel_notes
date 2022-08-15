@@ -122,4 +122,7 @@ public function hasPermission($alias, $require = false){
         return $require;
     }
  ```
- 
+ //После применения данного метода чекбоксы должны сохранять свое состояние.
+ 10. Определяем трейт для работы с политиками безопасности. Данный трейт будет связывать сущность User  с ролями и привелегиями. В модуле Role, папке Module создаем папку Traits. Создаем файл UserRoles.php прописываем namespace. 
+ 11. Определям в трейте связь между сущностью User и сущностью Role. public function roles(){return $this->belongToMany(Role::class, 'role_user');
+ 12. Подлючаем trait  в модели User.
