@@ -139,5 +139,9 @@ public function canDo($alias, $require = false){
     public function getMergedPermissions(){
 
     }
+    
+    public function getRoles(){
+        
+    }
 ```
 
