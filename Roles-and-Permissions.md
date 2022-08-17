@@ -144,4 +144,70 @@ public function canDo($alias, $require = false){
         
     }
 ```
+14. Описываем функцию canDo($alias, $require = false)
+```
+    public function canDo($alias, $require = false){
+        if(is_array($alias)){
+            foreach($alias as $permName){
+                $result = $this->canDo($permName);
+                if($result && !$require){
+                    return true;
+                }elseif(!$result && $require){
+                    return false;
+                }
+            }
+        }else {
+            foreach($this->roles as $role){
+                foreach($role->perms as $permission){
+                    if(Str::is($alias, $permission->alias)){
+                        return true;
+                    }
+                }
+            }
+        }
+        return $require;
+    }
+    
+```
+15. Функция hasRole($alias, $require = false)
+```
+ public function hasRole($alias, $require = false){
+        if(is_array($alias)){
+            foreach($alias as $roleName){
+                $hasRole = $this->hasRole($roleName);
+                if($hasRole && !$require){
+                    return true;
+                }elseif(!$hasRole  && $require){
+                    return false;
+                }
+            }
+        }else {
+            foreach($this->roles as $role){
+                    if($role->alias == $alias){
+                        return true;
+                    }
+                
+            }
+        }
+        return $require;
+    }
+```
+16. Функции getMergedPermissions(), getRoles()
 
+```
+public function getMergedPermissions(){
+        $result = [];
+        foreach($this->roles as $role){
+            $result = array_merge($result, $role->perms->toArray());
+        }
+        return $result;
+    }
+
+    public function getRoles(){
+        $roles = [];
+        if($this->roles){
+            return $this->roles;
+        }
+        return $roles;
+    }
+ ```
