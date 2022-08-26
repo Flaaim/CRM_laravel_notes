@@ -211,3 +211,10 @@ public function getMergedPermissions(){
         return $roles;
     }
  ```
+ ## Часть 4
+ 1. Переходим в модель Menu scopeFrontMenu(), рскоментируем условие WhereHas. Если все пункты меню равны в которых тип равен front,
+```
+->WhereHas('perms', function($q) use($user)){
+
+}
+```
