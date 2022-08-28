@@ -43,7 +43,7 @@
 
 ### AuthController
 
-3. Формируем массив $credentials; в нем храняться данные авторизации request(['email', 'password']) <- функция хелпер, передаем в нее поля нашей формы в виде массива (email, password)
+3. Формируем массив $credentials; в нем храняться данные авторизации request(['email', 'password']) (request без $!!!)<- функция хелпер, передаем в нее поля нашей формы в виде массива (email, password)
 4. Аутентифицируем пользователя, использую Auth::attempt($credentials) проверяем через if, если ошибка -> возвращаем json ответ с помощью класса ResponseService и функции sendJsonResponse() false, 403, массив ошибок $errors = ['message'=>'auth.login_error']
 5. С помощью $user = $request->user(); получаем аутентифицированного пользователя. 
 6. Формируем пользователя $tokenResult = $user->createToken('Personal Access Token');
