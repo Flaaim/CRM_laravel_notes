@@ -15,9 +15,14 @@ scopeFrontMenu($query, User $user){
 
 ```
 
-4. В ApiController'e в методе index() необходимо вернуть ResponseService::sendJsonResponse(true, 200, [], ['menu' => (Menu::frontMenu(Auth::user()->get()))->toArray()]);
-5. В модуле Dashboard в директории classes в классе Base.php Создаем переменную menu = $this->getMenu(); Переменная $menu передается в sidebar в меню. 
-6. Описываем метод getMenu() return Menu::make('menuRender, function($m){
+4. В ApiController'e в методе index() необходимо вернуть 
+```
+return ResponseService::sendJsonResponse(true, 200, [], [
+    'menu'=> (Menu::frontMenu(Auth::user())->get())->toArray()
+]);
+```
+6. В модуле Dashboard в директории classes в классе Base.php Создаем переменную menu = $this->getMenu(); Переменная $menu передается в sidebar в меню. 
+7. Описываем метод getMenu() return Menu::make('menuRender, function($m){
     foreach(MenuModel::menuByType(MenuModel::MENU_TYPE_ADMIN)->get() as $item){
         $path = $item->path;
         if($path && $this->checkRoutes($path) == true){
