@@ -11,7 +11,7 @@ private function createModel(){
   2. описываем метод createMigration()
   ```
   private function createMigration() {
-    $table = Str::plural(Str::sanke(class_basename($this->argument('name'))));
+    $table = Str::plural(Str::snake(class_basename($this->argument('name'))));
     $this->call(''make:migration', [
       'name' => "create_{$table}_table",
       '--create' => $table,
