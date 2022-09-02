@@ -65,7 +65,7 @@ private function createController() {
     }
     
  ```
- Прописываем use
+Подключаем Filesystem
  ```
 use Illuminate\Filesystem\Filesystem;
 ```
