@@ -62,6 +62,7 @@ private function createController() {
   public function __construct(Filesystem $filesystem){
     parent::__construct()
     $this->files =$filesystem;
+    }
     
  ```
  Прописываем use
