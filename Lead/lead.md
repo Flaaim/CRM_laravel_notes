@@ -25,15 +25,16 @@
             $table->foreign('status_id')->references('id')->on('statuses')->onDelete('cascade');
             $table->timestamps();
         });
-     ```
+```
+
 3. Описываем файл migration units
-     ```
+```
              Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
             $table->timestamps();
         });
-     ```
+ ```
 4. Описываем файл migration statuses
 ```
         Schema::create('statuses', function (Blueprint $table) {
@@ -66,7 +67,7 @@ public function source()
 ```
 7. Создаем модели Unit, Status
 8. Создаем модуль LeadComment --api --model --migration
-9. В модели LeadComment опичваем связи
+9. В модели LeadComment описываем связи
 ```
  public function comments()
  {
@@ -91,8 +92,8 @@ public function source()
   public function tasks() {}
 
   public function responsibleTasks() {}
-
 ```
+
 12. Создаем Policy App\Modules\Admin\Lead\Policies\LeadPolicy
 13. Копируем методы в LeadPolicy из RolePolicy.
 14. Добавляем новые permissions в метод canDO() LEADS_ACCESS, DASHBOARD_ACCESS. Добавляем их в таблицу permissions.
