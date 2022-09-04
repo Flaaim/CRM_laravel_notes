@@ -51,3 +51,60 @@
   
   
   ```
+  ### getApiRoutes();
+4. Описываем функцию getApiRoutes()
+  ```
+   private function getApiRoutes($sub, $mod, $path, $relativePath) 
+   {
+     $routesPath = $path.$relativePath."\\Routes\\api.php";
+     if(file_exists($routesPath)){
+        Route::group([
+         'prefix' => strtolower($mod),
+         'middleware' => $this->getMiddleware($mod, 'api'),
+        ], function () use($mod, $sub, $routesPath) {
+         Route::namespace("App\\Modules\\"$mod\\$sub\\"Controllers")->group($routesPath);
+        });
+     }
+   }
+```
+5. Описываем функцию getWebRoutes()
+```
+ private function getWebRoutes($sub, $mod, $path, $relativePath)
+ {
+   $routesPath = $path.$relativePath."/Routes/web.php";
+    if(file_exists($routesPath)){
+      if($mod != config('modular.groupWithoutPrefix'))
+      {
+        Route::group([
+        'prefix' => strtolower($mod),
+        'middleware' => $this->getMiddleware($mod),
+        ], function() use($mod, $sub, $routesPath) {
+         Route::namespace("App\\Modules\\$mod\\$sub\\Controllers")->group($routesPath);
+        });
+      } else {
+        Route::namespace("App\\Modules\\$mod\\$sub\\Controllers")->middleware($this->getMiddleware($mod))->group($routesPath);
+      }
+    }
+    
+ }
+```
+6. описываем функцию getMiddleware();
+```
+ private function getMiddleware($mod, $type = 'web') 
+ {
+   $middleware = [];
+   $config = config('modular.groupMiddleware');
+    if(isset($config[$mod])){
+       if(array_key_exists($type, $config[$mod])){
+         $middleware = array_merge($middleware, $config[$mod][$type]);
+       }
+    }
+   
+   return $middleware;
+   
+ }
+
+```
+   
+   
+   
