@@ -28,5 +28,9 @@ public function getLeads()
 ```
 3. Описываем функцию getLeads() в модели
 ```
-  
+  public function getLeads(){
+   return $this->with(['source', 'unit', 'status'])->whereBetween('status_id', [1,2])->orWhere(funtction($query){
+    $query->where('status_id', 3)->where('updated_at', '>', \DB::raw('DATE_SUB(NOW(), INTERVAL 24 HOUR'))
+   })->orderBy('created_at')->get();
+  }
 ```
