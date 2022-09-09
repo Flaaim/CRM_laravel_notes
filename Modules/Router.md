@@ -47,6 +47,9 @@
             }
           }
       });
+        $this->app['view']->addNamespace('Pub', base_path().'/resources/views/Pub');
+        $this->app['view']->addNamespace('Admin', base_path().'/resources/views/Admin');
+    }
     }
   
   
@@ -106,5 +109,5 @@
 
 ```
    
-   
+ 7. 
    
