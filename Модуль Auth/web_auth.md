@@ -33,7 +33,7 @@
 ```
 10.2. Выполняем миграцию с параметром --path=путь до миграции
 11. Создаем с помощью Seed пользователя для проверки работы логина.
-12. В модели User меняем родителя на AuthUser, который явл. псевдонимом от Illuminate\Foundation\Auth\User.
+12. В модели User меняем родителя на AuthUser, который явл. псевдонимом от Illuminate\Foundation\Auth\User
 13. В модели User формируем свойства $fillable; $hidden;
 ```php
   use Illuminate\Foundation\Auth\User as AuthUser;
