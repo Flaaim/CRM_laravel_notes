@@ -54,3 +54,43 @@
   }
 
 ```
+5. Добавляем новый метод в функции store() Sevice, который относиться к LeadController - addStoreComments(); //после save();
+```php
+
+    $this->addStoreComments($lead, $request, $user, $status);
+ ```
+ 6. Ниже описываем сам метод addStoreComments();
+ ```php
+    public function addStoreComments($lead, $request, $user, $status) {
+        $is_event = true;
+        $tmpText = "Пользователь ".$user->firstname."добавил новый лид со статусом ".$status->title;
+        LeadCommentService::saveComment($tmpText, $lead, $user, $status, null, $is_event);
+            //Проверяем если добавлен комментарий во фронте, то записываем его
+        if($request->text){
+            $is_event = false;
+            $tmpText = "Пользователь ".$user->firstname."оставил коментарий ".$request->text;
+            LeadCommentService::saveComment($tmpText, $lead, $user, $status, $request->text, $is_event);
+        }
+        
+    }
+    
+ ```
+7. Создаем миграцию для создания таблицы по хранению истории статусов лидов. Таблица lead_status. //связь многие ко многим
+```php 
+    $table->id();
+    $table->bigInteger('lead_id')->unsigned->nullable();
+    $table->foreign('lead_id')->references('id')->on('leads');
+    $table->bigInteger('status_id')->unsigned->nullable();
+    $table->foreign('status_id')->references('id')->on('statuses');
+```
+8. Применяем миграцию. Описываем связь многие со многим в модели Lead.
+```php
+    public function statuses(){
+        return $this->belongsToMany(Status::class);
+    }
+    
+```
+9. Добавлем в функции store() Sevice, который относиться к LeadController перед save();
+```php
+    $lead->statuses()->attach($status->id);
+```
