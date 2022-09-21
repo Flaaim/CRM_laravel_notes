@@ -60,3 +60,52 @@
   }
 
 ```
+7. Создаем метод update() в LeadController. Данный метод необходим для обновления лидов, при обновлении статус лида будет менять на new.
+```
+  public function update(leadCreateRequest $request, Lead $lead){
+      $this->authorize('update', Lead::class);
+      $lead = $this->service->update($request, Auth::user(), $lead);
+      return ResponseService::sendJsonResponse(true, 200, [], [
+        'item'=> $lead,
+      ]);
+  }
+
+```
+8. Описываем метод update() в Service.
+```
+  public function update($request, $user, $lead){
+    $tmp = clone $lead //клонируем текущий лид
+    $lead->countable++; //увелиичваем счетчик лида на 1
+    $status = Status::where('title', 'New')->first(); //получаем статус лида new
+    $lead->status()->associate($status);
+    $lead->save();
+    $this->addUpdateComments($request, $lead, $tmp, $status, $user);
+    return $lead;
+  }
+  
+```
+9. Описываем метод addUpdateComments()
+```
+  public function addUpdateComments($request, $lead, $tmp, $status, $user){
+      if($request->text){
+            $tmpText = "Пользователь ".$user->firstname." оставил комментарий к лиду ".$request->text;
+            LeadCommentService::saveComment($tmpText, $lead, $user, $status, $request->text, $is_event);
+        }
+        if($tmp->unit_id != $lead->unit_id){
+            $is_event = true;
+            $tmpText = "Пользователь ".$user->firstname." изменил подразделение лида на ".$lead->unit->title;
+            LeadCommentService::saveComment($tmpText, $lead, $user, $status, null, $is_event);
+        }
+        if($tmp->source_id != $lead->source_id){
+            $is_event = true;
+            $tmpText = "Пользователь ".$user->firstname." изменил источник лида на ".$lead->source->title;
+            LeadCommentService::saveComment($tmpText, $lead, $user, $status, null, $is_event);
+        }
+        $is_event = true;
+        $tmpText = "Пользователь ".$user->firstname." создал лид со статусом ".$status->title;
+        LeadCommentService::saveComment($tmpText, $lead, $user, $status, null, $is_event);
+        $lead->statuses()->attach($status->id);
+  }
+
+
+```
